@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:choose_input_chips/choose_input_chips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -15,6 +17,7 @@ class SendMailScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final priceController = useTextEditingController();
     final messageController = useTextEditingController();
+    File? image = ref.watch(emailNotifierProvider).cachedImage;
     List<String> recipients = [];
 
     const mockEmails = <String>['mac.steuber@ethereal.email', 'a@a.com', 'b@b.com'];
@@ -32,7 +35,9 @@ class SendMailScreen extends HookConsumerWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                ref.read(emailNotifierProvider).getImage();
+              },
               icon: const Icon(Icons.attachment),
             ),
             IconButton(
@@ -127,6 +132,7 @@ class SendMailScreen extends HookConsumerWidget {
                       ),
                     )
                   : const Expanded(child: GoogleMapWidget()),
+              image != null ? Expanded(child: Image.file(image)) : const SizedBox.shrink(),
             ],
           ),
         ),
